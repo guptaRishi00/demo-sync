@@ -16,22 +16,170 @@ import "./style.css";
 import { getAcademyData, getGlobalData, getHomePageData } from "@/data/loader";
 import { StrapiImage } from "@/components/custom/StrapiImage";
 
+// Base interfaces for common structures
+interface StrapiImageData {
+    url: string;
+    alternativeText?: string;
+    width?: number;
+    height?: number;
+}
+
+interface DecorImageData {
+    image?: StrapiImageData;
+    url?: string;
+}
+
+// Block component interfaces
+interface HeroSectionData {
+    __component: "blocks.hero-section";
+    title: string;
+    description: string;
+    image?: StrapiImageData;
+    decor_image?: DecorImageData;
+    decor_image2?: DecorImageData;
+}
+
+interface WhatToGetItemData {
+    title: string;
+    description: string;
+    image?: StrapiImageData;
+    decor_image?: StrapiImageData;
+}
+
+interface WhatToGetSectionData {
+    __component: "academypage.what-to-get";
+    title: string;
+    description: string;
+    clinical_training: WhatToGetItemData;
+    discussion_forum: WhatToGetItemData;
+    practice: WhatToGetItemData;
+    Learning: WhatToGetItemData;
+    Expert: WhatToGetItemData;
+}
+
+interface PointData {
+    title: string;
+    description: string;
+}
+
+interface PointsToJoinSectionData {
+    __component: "academypage.points-to-join";
+    title: string;
+    description: string;
+    points: PointData[];
+    decor_image?: StrapiImageData;
+}
+
+interface FAQItem {
+    title: string;
+    description: string;
+}
+
+interface SubscribeSectionData {
+    __component: "academypage.subscribe-section";
+    title: string;
+    description: string;
+    title2: string;
+    description2: string;
+    image?: StrapiImageData;
+    decor_new?: StrapiImageData;
+    faq: FAQItem[];
+}
+
+interface CommonQuoteData {
+    __component: "homepage.common-quote";
+    // Add specific properties based on your CommonQuoteSection component
+}
+
+interface HealthRequirementData {
+    __component: "homepage.health-requirement";
+    // Add specific properties based on your HealthRequirementSection component
+}
+
+interface HeaderData {
+    logo?: StrapiImageData;
+}
+
+interface JoinNewsLetterData {
+    // Add specific properties based on your JoinNewsLetter component
+}
+
+interface GlobalData {
+    decor_tree?: StrapiImageData;
+    decor_chair?: StrapiImageData;
+    decor_butterfly1?: StrapiImageData;
+    join_news_letter: JoinNewsLetterData;
+    header: HeaderData;
+}
+
+interface AcademyBlock {
+    __component: string;
+}
+
+interface AcademyPageData {
+    blocks: (HeroSectionData | WhatToGetSectionData | PointsToJoinSectionData | SubscribeSectionData)[];
+}
+
+interface HomePageBlock {
+    __component: string;
+}
+
+interface HomePageData {
+    blocks: (CommonQuoteData | HealthRequirementData)[];
+}
+
+// Component prop interfaces
+interface HeroSectionProps {
+    header: HeaderData;
+    data: HeroSectionData;
+}
+
+interface WhatToGetSectionProps {
+    data: WhatToGetSectionData;
+}
+
+interface PointsToJoinSectionProps {
+    data: PointsToJoinSectionData;
+}
+
+interface SubscribeSectionProps {
+    data: SubscribeSectionData;
+}
+
+interface DontMissInformationSectionProps {
+    data?: unknown; // You can define this based on actual usage
+}
+
+interface ScrollCardItem {
+    title: string;
+    description: string;
+}
+
 export default async function AcademyPage() {
-    const res = await getAcademyData();
+    const res: AcademyPageData = await getAcademyData();
 
-    const herosection = res.blocks.find((block: any) => block.__component === "blocks.hero-section");
-    const whatToget = res.blocks.find((block: any) => block.__component === "academypage.what-to-get");
-    const pointsToget = res.blocks.find((block: any) => block.__component === "academypage.points-to-join");
-    const subscribeSection = res.blocks.find((block: any) => block.__component === "academypage.subscribe-section");
+    const herosection = res.blocks.find((block): block is HeroSectionData => block.__component === "blocks.hero-section");
+    const whatToget = res.blocks.find((block): block is WhatToGetSectionData => block.__component === "academypage.what-to-get");
+    const pointsToget = res.blocks.find((block): block is PointsToJoinSectionData => block.__component === "academypage.points-to-join");
+    const subscribeSection = res.blocks.find(
+        (block): block is SubscribeSectionData => block.__component === "academypage.subscribe-section",
+    );
 
-    const { decor_image } = pointsToget;
+    const decor_image = pointsToget?.decor_image;
 
-    const homeres = await getHomePageData();
-    const commonQuote = homeres.blocks.find((block: any) => block.__component === "homepage.common-quote");
-    const healthRequirement = homeres.blocks.find((block: any) => block.__component === "homepage.health-requirement");
+    const homeres: HomePageData = await getHomePageData();
+    const commonQuote = homeres.blocks.find((block): block is CommonQuoteData => block.__component === "homepage.common-quote");
+    const healthRequirement = homeres.blocks.find(
+        (block): block is HealthRequirementData => block.__component === "homepage.health-requirement",
+    );
 
-    const globalres = await getGlobalData();
+    const globalres: GlobalData = await getGlobalData();
     const { decor_tree, decor_chair, decor_butterfly1, join_news_letter, header } = globalres;
+
+    // Ensure required data exists
+    if (!herosection || !whatToget || !pointsToget || !subscribeSection) {
+        throw new Error("Missing required page data");
+    }
 
     return (
         <>
@@ -45,7 +193,6 @@ export default async function AcademyPage() {
             </main>
 
             <main className="main bg-secondary/20 relative flex items-center">
-                {/* academy-bg.png */}
                 <PointsToJoinSection data={pointsToget} />
                 <DecorImage
                     src={decor_image?.url}
@@ -59,23 +206,25 @@ export default async function AcademyPage() {
                 <DontMissInformationSection />
             </main>
 
-            {/* WIP */}
             <main className="main hidden px-0! md:min-h-fit!">
                 <ScrollCards />
             </main>
 
             <main className="main relative flex items-start md:min-h-fit!">
-                {/* academy-bg.png */}
                 <SubscribeSection data={subscribeSection} />
             </main>
 
-            <main className="main bg-secondary/20 md:min-h-fit!">
-                <CommonQuoteSection data={commonQuote} />
-            </main>
+            {commonQuote && (
+                <main className="main bg-secondary/20 md:min-h-fit!">
+                    <CommonQuoteSection data={commonQuote} />
+                </main>
+            )}
 
-            <main className="main hidden overflow-hidden py-8">
-                <HealthRequirementSection data={healthRequirement} />
-            </main>
+            {healthRequirement && (
+                <main className="main hidden overflow-hidden py-8">
+                    <HealthRequirementSection data={healthRequirement} />
+                </main>
+            )}
 
             <main className="main relative flex flex-col gap-8 overflow-hidden py-12 md:gap-12" id="contact-us">
                 <ConnectToSyncSection />
@@ -103,13 +252,11 @@ export default async function AcademyPage() {
     );
 }
 
-function HeroSection(props: any) {
-    const { header, data } = props;
-
+function HeroSection({ header, data }: HeroSectionProps) {
     const { title, description, image, decor_image2, decor_image } = data;
+
     return (
         <section className="section relative flex flex-col gap-4 py-8 md:min-h-dvh">
-            {/* Header */}
             <div className="mb-8 w-full">
                 <Header logo={header.logo?.url} />
             </div>
@@ -178,7 +325,7 @@ function HeroSection(props: any) {
                                 </div>
                             </div>
 
-                            <div className="flex hidden px-2">
+                            <div className="hidden px-2">
                                 <div className="relative size-6 overflow-hidden rounded-full border-2 border-white">
                                     <Image src="/images/academy-user-1.png" alt="User 1" fill className="h-full w-full" />
                                 </div>
@@ -197,7 +344,7 @@ function HeroSection(props: any) {
                             </div>
                         </div>
                     </div>
-                    <StrapiImage src={image?.url} alt="Hero Thumbnail" className="absolute object-cover" />
+                    <StrapiImage src={image?.url ?? ""} alt="Hero Thumbnail" className="absolute object-cover" />
                 </div>
             </div>
 
@@ -211,8 +358,9 @@ function HeroSection(props: any) {
     );
 }
 
-function WhatToGetSection({ data }: any) {
+function WhatToGetSection({ data }: WhatToGetSectionProps) {
     const { title, description, clinical_training, discussion_forum, practice, Learning, Expert } = data;
+
     return (
         <section className="section flex flex-col gap-12 py-16">
             <div className="font-popins grid w-full grid-cols-1 gap-4 md:grid-cols-[40fr_60fr] md:gap-16">
@@ -226,14 +374,14 @@ function WhatToGetSection({ data }: any) {
             <div className="grid grid-flow-row grid-cols-2 grid-rows-2 gap-6 md:grid-cols-4 [&>div]:flex [&>div]:flex-col [&>div]:overflow-hidden [&>div]:rounded-2xl [&>div]:p-8">
                 <div className="to-primary from-primary-light col-span-2 items-center bg-gradient-to-r md:col-span-1">
                     <div className="relative mb-8 size-24">
-                        <StrapiImage src={clinical_training.image?.url} alt="User 1" className="h-full w-full" />
+                        <StrapiImage src={clinical_training.image?.url ?? ""} alt="Clinical Training" className="h-full w-full" />
                     </div>
                     <h6 className="font-popins w-full pb-4 text-left text-lg font-bold">{clinical_training.title}</h6>
                     <p className="font-popins w-full text-left text-lg font-medium">{clinical_training.description}</p>
                 </div>
                 <div className="relative col-span-2 bg-gradient-to-r from-white to-white">
                     <div className="relative mb-8 size-24">
-                        <StrapiImage src={discussion_forum.image?.url} alt="User 1" className="h-full w-full" />
+                        <StrapiImage src={discussion_forum.image?.url ?? ""} alt="Discussion Forum" className="h-full w-full" />
                     </div>
                     <h6 className="font-popins w-full pb-4 text-left text-lg font-bold">Discussion Forum</h6>
                     <p className="w-1/2 text-left text-lg">{discussion_forum.description}</p>
@@ -246,7 +394,7 @@ function WhatToGetSection({ data }: any) {
                 </div>
                 <div className="to-primary-light/50 from-primary-light/60 col-span-2 items-center bg-gradient-to-r md:col-span-1">
                     <div className="relative mb-8 size-24">
-                        <StrapiImage src={practice.image?.url} alt="User 1" className="h-full w-full" />
+                        <StrapiImage src={practice.image?.url ?? ""} alt="Practice" className="h-full w-full" />
                     </div>
                     <h6 className="font-popins w-full pb-4 text-left text-lg font-bold">{practice.title}</h6>
                     <p className="font-popins w-full text-left text-lg font-medium">{practice.description}</p>
@@ -254,7 +402,7 @@ function WhatToGetSection({ data }: any) {
 
                 <div className="to-primary from-primary-light relative col-span-2 bg-gradient-to-r">
                     <div className="relative mb-8 size-24">
-                        <StrapiImage src={Learning.image?.url} alt="User 1" className="h-full w-full" />
+                        <StrapiImage src={Learning.image?.url ?? ""} alt="Learning" className="h-full w-full" />
                     </div>
                     <h6 className="font-popins w-full pb-4 text-left text-lg font-bold">{Learning.title}</h6>
                     <p className="font-popins text-left text-lg font-medium text-balance md:w-1/2">{Learning.description}</p>
@@ -267,7 +415,7 @@ function WhatToGetSection({ data }: any) {
                 </div>
                 <div className="to-primary-light/50 from-primary-light/60 relative col-span-2 bg-gradient-to-r">
                     <div className="relative mb-8 size-24">
-                        <StrapiImage src={Expert.image?.url} alt="User 1" className="h-full w-full" />
+                        <StrapiImage src={Expert.image?.url ?? ""} alt="Expert" className="h-full w-full" />
                     </div>
                     <h6 className="font-popins w-full pb-4 text-left text-lg font-bold">{Expert.title}</h6>
                     <p className="font-popins text-left text-lg font-medium text-balance md:w-1/2">{Expert.description}</p>
@@ -278,16 +426,9 @@ function WhatToGetSection({ data }: any) {
     );
 }
 
-function PointsToJoinSection({ data }: any) {
+function PointsToJoinSection({ data }: PointsToJoinSectionProps) {
     const { title, description, points } = data;
 
-    // const points = {
-    //     "Clinical Internships": "Apply your skills in real therapy environments under expert guidance.",
-    //     "Coaching Workshops": "Join live sessions to build confidence and sharpen your counseling skills.",
-    //     "Self-paced Modules": "Learn anytime with structured, easy-to-follow lessons.",
-    //     "Case Discussions": "Analyze real-world cases and improve decision-making.",
-    //     "Expert Mentorship": "Get guidance from seasoned professionals in mental health.",
-    // };
     return (
         <section className="section relative flex h-full flex-col items-center justify-center gap-4 py-12 md:flex-row">
             <div className="relative aspect-square w-3/4 grow md:min-h-[65vh] md:w-auto">
@@ -299,7 +440,7 @@ function PointsToJoinSection({ data }: any) {
                 <p className="font-popins text-lg font-normal text-balance">{description}</p>
 
                 <div className="flex flex-col gap-6">
-                    {points.map((point: any, index: number) => (
+                    {points.map((point: PointData, index: number) => (
                         <div key={index} className="font-popins flex items-center gap-6 rounded-2xl bg-white p-4 text-base font-medium">
                             <span className="bg-primary grid size-12 shrink-0 place-items-center rounded-full text-lg font-semibold">
                                 {index + 1}
@@ -318,7 +459,7 @@ function PointsToJoinSection({ data }: any) {
     );
 }
 
-function DontMissInformationSection({ data }: any) {
+function DontMissInformationSection({ data }: DontMissInformationSectionProps) {
     return (
         <section className="section relative flex grow flex-col items-center justify-center gap-6 py-8 md:gap-12">
             <h2 className="font-popins relative text-3xl font-semibold md:text-5xl">
@@ -338,8 +479,9 @@ function DontMissInformationSection({ data }: any) {
     );
 }
 
-function SubscribeSection({ data }: any) {
+function SubscribeSection({ data }: SubscribeSectionProps) {
     const { title, description, title2, description2, image, decor_new, faq } = data;
+
     return (
         <section className="section relative flex h-full flex-col items-start justify-start gap-12 py-8 md:flex-row md:py-16">
             <div className="space-y-6">
@@ -366,7 +508,7 @@ function SubscribeSection({ data }: any) {
                 </h5>
                 <p className="text-lg">{description2}</p>
                 <Accordion type="single" collapsible className="text-lg">
-                    {faq.map((item: any, index: number) => (
+                    {faq.map((item: FAQItem, index: number) => (
                         <AccordionItem key={index} value={`item-${index}`}>
                             <AccordionTrigger className="font-popins flex items-center justify-between">{item.title}</AccordionTrigger>
                             <AccordionContent className="font-popins text-muted">{item.description}</AccordionContent>
@@ -379,7 +521,7 @@ function SubscribeSection({ data }: any) {
 }
 
 function ScrollCards() {
-    const line1 = [
+    const line1: ScrollCardItem[] = [
         {
             title: "Lorem Ipsum",
             description: "Lorem Ipsum dolor sit amet",
@@ -421,6 +563,7 @@ function ScrollCards() {
             description: "Lorem Ipsum dolor sit amet",
         },
     ];
+
     return (
         <section className="">
             <ScrollArea className="scroll-9 mx-auto h-94 w-full gap-20 p-4 whitespace-nowrap">
