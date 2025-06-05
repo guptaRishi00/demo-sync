@@ -101,6 +101,9 @@ interface HeaderData {
 }
 
 interface JoinNewsLetterData {
+    title: string;
+    subtitle: string;
+    disclaimer: string;
     // Add specific properties based on your JoinNewsLetter component
 }
 
@@ -112,17 +115,17 @@ interface GlobalData {
     header: HeaderData;
 }
 
-interface AcademyBlock {
-    __component: string;
-}
+// interface AcademyBlock {
+//     __component: string;
+// }
 
 interface AcademyPageData {
     blocks: (HeroSectionData | WhatToGetSectionData | PointsToJoinSectionData | SubscribeSectionData)[];
 }
 
-interface HomePageBlock {
-    __component: string;
-}
+// interface HomePageBlock {
+//     __component: string;
+// }
 
 interface HomePageData {
     blocks: (CommonQuoteData | HealthRequirementData)[];
@@ -174,7 +177,7 @@ export default async function AcademyPage() {
     );
 
     const globalres: GlobalData = await getGlobalData();
-    const { decor_tree, decor_chair, decor_butterfly1, join_news_letter, header } = globalres;
+    const { decor_tree, decor_chair, join_news_letter, header } = globalres;
 
     // Ensure required data exists
     if (!herosection || !whatToget || !pointsToget || !subscribeSection) {
@@ -460,6 +463,8 @@ function PointsToJoinSection({ data }: PointsToJoinSectionProps) {
 }
 
 function DontMissInformationSection({ data }: DontMissInformationSectionProps) {
+    console.log(data);
+
     return (
         <section className="section relative flex grow flex-col items-center justify-center gap-6 py-8 md:gap-12">
             <h2 className="font-popins relative text-3xl font-semibold md:text-5xl">

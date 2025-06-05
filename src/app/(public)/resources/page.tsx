@@ -1,4 +1,4 @@
-import { BlogPost, getAllPosts, getStrapiData } from "@/actions/blog.action";
+import { BlogPost, getAllPosts } from "@/actions/blog.action";
 import { BlogCard } from "@/components/prefabs/blog-card";
 import BlogHeroCard from "@/components/prefabs/blog-hero-card";
 import CommonQuoteSection from "@/components/prefabs/common-quote-section";
@@ -13,16 +13,74 @@ import { Button } from "@/components/ui/button";
 import { getGlobalData, getHomePageData } from "@/data/loader";
 import Image from "next/image";
 
+// Define interfaces for the data structures
+interface Logo {
+    url: string;
+}
+
+interface HeaderData {
+    logo: Logo;
+}
+
+interface CommonQuoteBlock {
+    __component: "homepage.common-quote";
+    // Add other properties as needed
+}
+
+interface VibeSectionBlock {
+    __component: "homepage.vibe-section";
+    // Add other properties as needed
+}
+
+interface HomePageBlock {
+    __component: string;
+}
+
+interface DecorImage {
+    url: string;
+}
+
+interface JoinNewsLetterData {
+    // Add properties as needed based on your data structure
+    title: string;
+    subtitle: string;
+    disclaimer: string;
+}
+
+interface GlobalData {
+    decor_tree: DecorImage;
+    decor_chair: DecorImage;
+    join_news_letter: JoinNewsLetterData;
+    header: HeaderData;
+}
+
+interface HomePageData {
+    blocks: HomePageBlock[];
+}
+
+interface HeroSectionProps {
+    latestPost: BlogPost;
+    header: HeaderData;
+}
+
+interface BlogListSectionProps {
+    posts: BlogPost[];
+}
+
 export default async function BlogPage() {
     const posts = await getAllPosts();
     const sorted = posts.sort((a, b) => b.date.diff(a.date));
     const latestPost = sorted[0];
 
-    const homeres = await getHomePageData();
-    const commonQuote = homeres.blocks.find((block: any) => block.__component === "homepage.common-quote");
-    const vibeSection = homeres.blocks.find((block: any) => block.__component === "homepage.vibe-section");
+    const homeres: HomePageData = await getHomePageData();
+    const commonQuote = homeres.blocks.find(
+        (block: HomePageBlock): block is CommonQuoteBlock => block.__component === "homepage.common-quote",
+    );
+    const vibeSection = homeres.blocks.find(
+        (block: HomePageBlock): block is VibeSectionBlock => block.__component === "homepage.vibe-section",
+    );
 
-    const globalres = await getGlobalData();
+    const globalres: GlobalData = await getGlobalData();
     const { decor_tree, decor_chair, join_news_letter, header } = globalres;
 
     return (
@@ -36,13 +94,9 @@ export default async function BlogPage() {
                 <BlogListSection posts={sorted} />
             </main>
 
-            <main className="main bg-secondary/10 md:min-h-fit!">
-                <CommonQuoteSection data={commonQuote} />
-            </main>
+            <main className="main bg-secondary/10 md:min-h-fit!">{commonQuote && <CommonQuoteSection data={commonQuote} />}</main>
 
-            <main className="main bg-secondary/20 md:min-h-fit!">
-                <VibeSection data={vibeSection} />
-            </main>
+            <main className="main bg-secondary/20 md:min-h-fit!">{vibeSection && <VibeSection data={vibeSection} />}</main>
 
             {/* <main className="main hidden overflow-hidden py-8">
                 <HealthRequirementSection />
@@ -74,7 +128,7 @@ export default async function BlogPage() {
     );
 }
 
-function HeroSection({ latestPost, header }: any) {
+function HeroSection({ latestPost, header }: HeroSectionProps) {
     console.log(header.logo.url);
 
     return (
@@ -91,7 +145,7 @@ function HeroSection({ latestPost, header }: any) {
     );
 }
 
-function BlogListSection({ posts }: { posts: BlogPost[] }) {
+function BlogListSection({ posts }: BlogListSectionProps) {
     console.log("blogs: ", posts);
 
     return (

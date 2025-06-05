@@ -7,7 +7,7 @@ import Footer from "@/components/prefabs/footer";
 import Header from "@/components/prefabs/header";
 // import HealthRequirementSection from "@/components/prefabs/health-requirement-section";
 import JoinNewsLetter from "@/components/prefabs/join-newsletter";
-import { getGlobalData, getHomePageData, getServiceData } from "@/data/loader";
+import { getGlobalData, getServiceData } from "@/data/loader";
 import Image from "next/image";
 import React from "react";
 

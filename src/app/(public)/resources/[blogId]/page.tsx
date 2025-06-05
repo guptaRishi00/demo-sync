@@ -1,5 +1,5 @@
 import { getAllPosts } from "@/actions/blog.action";
-import { ContentOne, ContentThree, ContentTwo } from "@/app/(public)/resources/content";
+import { ContentOne } from "@/app/(public)/resources/content";
 import { BlogCard } from "@/components/prefabs/blog-card";
 // import CommonQuoteSection from "@/components/prefabs/common-quote-section";
 import ConnectToSyncSection from "@/components/prefabs/connect-to-sync-section";
@@ -11,6 +11,38 @@ import JoinNewsLetter from "@/components/prefabs/join-newsletter";
 // import VibeSection from "@/components/prefabs/vibes-section";
 import { getGlobalData, getPost } from "@/data/loader";
 import Image from "next/image";
+
+// Type definitions
+import type { BlogPost } from "@/actions/blog.action";
+
+interface DecorImage {
+    url: string;
+}
+
+interface JoinNewsLetterData {
+    title: string;
+    disclaimer: string;
+    subtitle: string;
+}
+
+interface HeaderData {
+    logo: {
+        url: string;
+    };
+}
+
+interface GlobalData {
+    decor_tree: DecorImage;
+    decor_chair: DecorImage;
+    join_news_letter: JoinNewsLetterData;
+    header: HeaderData;
+}
+
+interface HeroSectionProps {
+    post: BlogPost;
+    latestPosts: BlogPost[];
+    header: HeaderData;
+}
 
 type Props = {
     params: Promise<Record<string, string>>;
@@ -24,7 +56,7 @@ export default async function BlogDetailPage({ params }: Props) {
 
     console.log("slug: ", post);
 
-    const globalres = await getGlobalData();
+    const globalres: GlobalData = await getGlobalData();
     const { decor_tree, decor_chair, join_news_letter, header } = globalres;
 
     return (
@@ -66,7 +98,7 @@ export default async function BlogDetailPage({ params }: Props) {
     );
 }
 
-function HeroSection({ post, latestPosts, header }: any) {
+function HeroSection({ post, latestPosts, header }: HeroSectionProps) {
     return (
         <section className="section relative flex min-h-full grow flex-col gap-4 py-8 sm:py-12 md:py-16">
             {/* Header */}
@@ -90,7 +122,7 @@ function HeroSection({ post, latestPosts, header }: any) {
                         <h3 className="font-popins text-xl font-semibold">Latest Post</h3>
 
                         <div className="grid-col-1 mb-4 grid gap-6">
-                            {latestPosts && latestPosts.map((post: any) => <BlogCard key={post.slug} post={post} />)}
+                            {latestPosts && latestPosts.map((post: BlogPost) => <BlogCard key={post.slug} post={post} />)}
                         </div>
                     </div>
                 </div>
