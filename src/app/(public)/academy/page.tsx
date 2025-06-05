@@ -88,12 +88,32 @@ interface SubscribeSectionData {
 
 interface CommonQuoteData {
     __component: "homepage.common-quote";
+    description: string;
+    image: { url: string };
+    decor_underline: { image: { url: string } };
+    name: string;
+    designation: string;
+    decor_light: { image: { url: string } };
     // Add specific properties based on your CommonQuoteSection component
+}
+interface StrapiImage {
+    url: string;
+}
+interface Card {
+    id: number;
+    title: string;
+    description?: string;
+    image: StrapiImage;
 }
 
 interface HealthRequirementData {
     __component: "homepage.health-requirement";
     // Add specific properties based on your HealthRequirementSection component
+
+    title: string;
+    description: string;
+    decor_smile: { image: StrapiImage };
+    simple_card: Card[];
 }
 
 interface HeaderData {
@@ -261,7 +281,7 @@ function HeroSection({ header, data }: HeroSectionProps) {
     return (
         <section className="section relative flex flex-col gap-4 py-8 md:min-h-dvh">
             <div className="mb-8 w-full">
-                <Header logo={header.logo?.url} />
+                <Header logo={header.logo?.url ?? ""} />
             </div>
 
             <div className="grid grid-flow-row auto-rows-min grid-cols-1 grid-rows-2 gap-6 md:grow md:grid-cols-2 md:grid-rows-1">
@@ -491,7 +511,7 @@ function SubscribeSection({ data }: SubscribeSectionProps) {
         <section className="section relative flex h-full flex-col items-start justify-start gap-12 py-8 md:flex-row md:py-16">
             <div className="space-y-6">
                 <div className="relative aspect-1307/497 w-3/4 md:max-w-[30vw]">
-                    <StrapiImage src={image?.url} alt="Academy Frame" className="md:h-full md:w-full" />
+                    <StrapiImage src={image?.url ?? ""} alt="Academy Frame" className="md:h-full md:w-full" />
                     <DecorImage src={decor_new?.url} alt="Decor Butterfly" size={[40, 40]} className="right-0 bottom-0 translate-y-full" />
                 </div>
                 <h2 className="font-popins relative text-3xl leading-10 font-bold md:text-5xl md:leading-16">
