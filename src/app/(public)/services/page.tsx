@@ -11,22 +11,108 @@ import { getGlobalData, getServiceData } from "@/data/loader";
 import Image from "next/image";
 import React from "react";
 
+interface StrapiImageType {
+    url: string;
+}
+
+interface HeroSectionData {
+    __component: "blocks.hero-section";
+    title: string;
+    description: string;
+    image: StrapiImageType;
+    decor_image: {
+        image?: StrapiImageType;
+    };
+    small_component: {
+        title: string;
+        description: string;
+    };
+    bg_image?: StrapiImageType;
+}
+interface JoinNewsLetterData {
+    // Add properties as needed based on your data structure
+    title: string;
+    subtitle: string;
+    disclaimer: string;
+}
+
+interface Logo {
+    url: string;
+}
+interface HeaderData {
+    logo: Logo;
+}
+
+interface DecorImage {
+    url: string;
+}
+
+interface GlobalData {
+    decor_tree: DecorImage;
+    decor_chair: DecorImage;
+    join_news_letter: JoinNewsLetterData;
+    header: HeaderData;
+}
+
+interface Info {
+    __component: "elements.info-section";
+    title: string;
+    decor_image1: ImageData;
+    decor_image2: ImageData;
+    decor_image3: ImageData;
+    image: ImageData;
+    list: ListItem[];
+    list_title: string;
+}
+
+interface ConsultationsData {
+    decor_image1: ImageData;
+    decor_image2: ImageData;
+    decor_image3: ImageData;
+    image: ImageData;
+    list: ListItem[];
+    list_title: string;
+}
+
+interface Consult {
+    __component: "servicepage.consultations";
+    consultations: ConsultationsData;
+}
+
+interface AssessmentsData {
+    title: string;
+    decor_image1: ImageData;
+    decor_image2: ImageData;
+    decor_image3: ImageData;
+    image: ImageData;
+    list: ListItem[];
+    list_title: string;
+}
+
+// Fixed Assessment interface - add the missing assessments property
+interface Assessment {
+    __component: "servicepage.assessments";
+    assessments: AssessmentsData;
+}
+
+type Block = HeroSectionData | Info | Consult | Assessment;
+
 export default async function ServicesPage() {
-    const globalres = await getGlobalData();
+    const globalres: GlobalData = await getGlobalData();
     const { decor_tree, decor_chair, join_news_letter, header } = globalres;
 
     const res = await getServiceData();
 
-    const herosection = res.blocks.find((block: any) => block.__component === "blocks.hero-section");
-    const info = res.blocks.find((block: any) => block.__component === "elements.info-section");
-    const consult = res.blocks.find((block: any) => block.__component === "servicepage.consultations");
-    const assessment = res.blocks.find((block: any) => block.__component === "servicepage.assessments");
+    const herosection = res.blocks.find((block: Block) => block.__component === "blocks.hero-section") as HeroSectionData;
+    const info = res.blocks.find((block: Block) => block.__component === "elements.info-section") as Info;
+    const consult = res.blocks.find((block: Block) => block.__component === "servicepage.consultations") as Consult;
+    const assessment = res.blocks.find((block: Block) => block.__component === "servicepage.assessments") as Assessment;
 
     const { bg_image } = herosection;
     return (
         <>
             <main className="main relative overflow-x-clip">
-                <StrapiImage src={bg_image?.url} alt="Hero" className="-z-50 object-cover opacity-10" />
+                <StrapiImage src={bg_image?.url ?? ""} alt="Hero" className="-z-50 object-cover opacity-10" />
                 <HeroSection header={header} data={herosection} />
             </main>
 
@@ -76,8 +162,33 @@ export default async function ServicesPage() {
     );
 }
 
-function HeroSection(props: any) {
-    const { header, data } = props;
+interface ImageData {
+    url: string;
+    alt?: string;
+}
+
+interface HeaderData {
+    logo: {
+        url: string;
+    };
+}
+
+interface HeroData {
+    title: string;
+    image: ImageData;
+    decor_image: {
+        image?: ImageData;
+    };
+    description: string;
+}
+
+interface HeroSectionProps {
+    header: HeaderData;
+    data: HeroData;
+}
+
+function HeroSection({ header, data }: HeroSectionProps) {
+    // const { header, data } = props;
     const { title, image, decor_image, description } = data;
 
     return (
@@ -121,7 +232,31 @@ function HeroSection(props: any) {
     );
 }
 
-function ConsultationSection({ data }: any) {
+interface ImageData {
+    url: string;
+    alt?: string;
+}
+
+interface ListItem {
+    title: string;
+    description: string;
+}
+
+interface ConsultationData {
+    title: string;
+    decor_image1: ImageData;
+    decor_image2: ImageData;
+    decor_image3: ImageData;
+    image: ImageData;
+    list: ListItem[];
+    list_title: string;
+}
+
+interface ConsultationSectionProps {
+    data: ConsultationData;
+}
+
+function ConsultationSection({ data }: ConsultationSectionProps) {
     const { title, decor_image1, decor_image2, image, decor_image3, list, list_title } = data;
 
     console.log(data);
@@ -202,7 +337,34 @@ function ConsultationSection({ data }: any) {
     );
 }
 
-function PsychiatricConsultationsSection({ data }: any) {
+interface ImageData {
+    url: string;
+    alt?: string;
+}
+
+interface ListItem {
+    title: string;
+    description: string;
+}
+
+interface ConsultationsData {
+    decor_image1: ImageData;
+    decor_image2: ImageData;
+    decor_image3: ImageData;
+    image: ImageData;
+    list: ListItem[];
+    list_title: string;
+}
+
+interface PsychiatricConsultationsSectionData {
+    consultations: ConsultationsData;
+}
+
+interface PsychiatricConsultationsSectionProps {
+    data: PsychiatricConsultationsSectionData;
+}
+
+function PsychiatricConsultationsSection({ data }: PsychiatricConsultationsSectionProps) {
     const { decor_image1, decor_image2, image, decor_image3, list, list_title } = data.consultations;
 
     return (
@@ -280,7 +442,36 @@ function PsychiatricConsultationsSection({ data }: any) {
     );
 }
 
-function CounsellingAndPsychotherapy({ data }: any) {
+interface ImageData {
+    url: string;
+    alt?: string;
+}
+
+// ListItem interface (consistent with your existing code)
+interface ListItem {
+    title: string;
+    description: string;
+}
+
+// Assessments data structure (matching the data.assessments pattern)
+interface AssessmentsData {
+    title: string;
+    decor_image1: ImageData;
+    decor_image2: ImageData;
+    decor_image3: ImageData;
+    image: ImageData;
+    list: ListItem[];
+    list_title: string;
+}
+
+// Main component props type (following the same pattern as other sections)
+interface CounsellingAndPsychotherapyProps {
+    data: {
+        assessments: AssessmentsData;
+    };
+}
+
+function CounsellingAndPsychotherapy({ data }: CounsellingAndPsychotherapyProps) {
     const { title, decor_image1, decor_image2, image, decor_image3, list, list_title } = data.assessments;
 
     return (
