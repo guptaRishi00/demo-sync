@@ -142,7 +142,13 @@ export default async function AboutPage() {
     );
 }
 
-function HeroSection(props: { header: any; data: HeroSectionData }) {
+interface HeaderData {
+    logo: {
+        url: string;
+    };
+}
+
+function HeroSection(props: { header: HeaderData; data: HeroSectionData }) {
     const { header, data } = props;
 
     const { title, description, image, decor_image, small_component } = data;
