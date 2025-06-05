@@ -3,26 +3,26 @@ import DecorImage from "./decor-image";
 import { StrapiImage } from "../custom/StrapiImage";
 import React from "react";
 
-interface ContactSectionData {
-    title: string;
-    description: string;
-    bg_testimonial: {
-        url: string;
-    };
-    testimonial_mask: {
-        url: string;
-    };
-    qr_code: {
-        url: string;
-    };
-    cat: string;
-    location: string;
-    full_location: string;
-    phone_number: string;
-    number: string;
-    e_mail: string;
-    mail: string;
-}
+// interface ContactSectionData {
+//     title: string;
+//     description: string;
+//     bg_testimonial: {
+//         url: string;
+//     };
+//     testimonial_mask: {
+//         url: string;
+//     };
+//     qr_code: {
+//         url: string;
+//     };
+//     cat: string;
+//     location: string;
+//     full_location: string;
+//     phone_number: string;
+//     number: string;
+//     e_mail: string;
+//     mail: string;
+// }
 
 interface ContactSectionProps {
     data: {

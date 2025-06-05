@@ -1,6 +1,6 @@
 import CommitmentCard from "@/components/prefabs/commitment-card";
 // import Image from "next/image";
-import { StrapiImage } from "../custom/StrapiImage";
+// import { StrapiImage } from "../custom/StrapiImage";
 
 // interface StrapiImageType {
 //     url: string;
