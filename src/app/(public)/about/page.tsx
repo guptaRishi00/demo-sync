@@ -68,6 +68,17 @@ interface VisionSectionData {
         description: string;
     };
 }
+interface CommitmentSectionData {
+    __component: "aboutpage.commitment-section";
+    title: string;
+    description: string;
+    points: {
+        id: number;
+        text: string;
+    }[];
+}
+
+type Block = HeroSectionData | MeetExpertsData | VisionSectionData | CommitmentSectionData;
 
 export default async function AboutPage() {
     const globalres = await getGlobalData();
@@ -75,17 +86,19 @@ export default async function AboutPage() {
 
     const res = await getAboutData();
 
-    const herosection = res.blocks.find((block: any) => block.__component === "blocks.hero-section");
-    const meetExperts = res.blocks.find((block: any) => block.__component === "aboutpage.meet-experts");
-    const visionSection = res.blocks.find((block: any) => block.__component === "aboutpage.why-choose");
-    const commitmentSection = res.blocks.find((block: any) => block.__component === "aboutpage.commitment-section");
+    const herosection = res.blocks.find((block: Block) => block.__component === "blocks.hero-section") as HeroSectionData;
+    const meetExperts = res.blocks.find((block: Block) => block.__component === "aboutpage.meet-experts") as MeetExpertsData;
+    const visionSection = res.blocks.find((block: Block) => block.__component === "aboutpage.why-choose") as VisionSectionData;
+    const commitmentSection = res.blocks.find(
+        (block: Block) => block.__component === "aboutpage.commitment-section",
+    ) as CommitmentSectionData;
 
     const { bg_image } = herosection;
 
     return (
         <>
             <main className="main relative overflow-x-clip">
-                <StrapiImage src={bg_image?.url} alt="Hero" className="-z-50 object-cover opacity-10" />
+                <StrapiImage src={bg_image?.url ?? ""} alt="Hero" className="-z-50 object-cover opacity-10" />
                 <HeroSection header={header} data={herosection} />
             </main>
 
