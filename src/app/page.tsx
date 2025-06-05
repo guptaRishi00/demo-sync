@@ -1,9 +1,9 @@
-import BookAppointmentButton from "@/components/prefabs/book-appointment-button";
+// import BookAppointmentButton from "@/components/prefabs/book-appointment-button";
 import DecorImage from "@/components/prefabs/decor-image";
 import ExportServiceCard from "@/components/prefabs/export-service-card";
-import Header from "@/components/prefabs/header";
+// import Header from "@/components/prefabs/header";
 import { Button } from "@/components/ui/button";
-import { Play } from "lucide-react";
+// import { Play } from "lucide-react";
 
 import CommonQuoteSection from "@/components/prefabs/common-quote-section";
 import ConnectToSyncSection from "@/components/prefabs/connect-to-sync-section";
