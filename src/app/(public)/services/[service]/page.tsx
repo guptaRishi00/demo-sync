@@ -38,7 +38,7 @@ function HeroSection({ serviceDetail }: { serviceDetail: ServiceDetailContent })
         <section className="section relative flex flex-col gap-4 py-8 sm:py-12 md:py-16">
             {/* Header */}
             <div className="mb-8 w-full">
-                <Header />
+                <Header logo="" />
             </div>
 
             <div className="grid-row-4 grid h-full grid-flow-row grid-cols-3 gap-6">

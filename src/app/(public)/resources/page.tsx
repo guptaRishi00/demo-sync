@@ -25,11 +25,38 @@ interface HeaderData {
 interface CommonQuoteBlock {
     __component: "homepage.common-quote";
     // Add other properties as needed
+    description: string;
+    image: {
+        url: string;
+    };
+    decor_underline: {
+        image: {
+            url: string;
+        };
+    };
+    name: string;
+    designation: string;
+    decor_light: {
+        image: {
+            url: string;
+        };
+    };
+}
+
+interface Carousel {
+    image: {
+        url: string;
+    };
+    id: number;
 }
 
 interface VibeSectionBlock {
     __component: "homepage.vibe-section";
     // Add other properties as needed
+    decor_vibes: {
+        image: { url: string };
+    };
+    carousel: Carousel[];
 }
 
 interface HomePageBlock {
