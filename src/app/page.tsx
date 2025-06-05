@@ -21,23 +21,115 @@ import { getGlobalData, getHomePageData } from "@/data/loader";
 // import { StrapiVideo } from "@/components/custom/StrapiVideo";
 import { StrapiImage } from "@/components/custom/StrapiImage";
 
+// Type definitions
+interface StrapiImage {
+    url: string;
+}
+
+interface Block {
+    __component: string;
+    [key: string]: unknown;
+}
+
+interface HeroSectionData extends Block {
+    __component: "blocks.hero-section";
+    subtitle_one: string;
+    title: string;
+    description: string;
+    subtitle_two: string;
+    image: StrapiImage;
+    bg_image: StrapiImage;
+}
+
+interface DecorItem {
+    image: StrapiImage;
+}
+
+interface FounderNoteData extends Block {
+    __component: "homepage.founder-note";
+    title: string;
+    decor_highlight: DecorItem;
+    decor_new: DecorItem;
+}
+
+interface CardDetail {
+    id: string;
+    imagePath: StrapiImage;
+    title: string;
+    description: string;
+    isBookAppointment?: boolean;
+}
+
+interface SmallComponent {
+    title: string;
+    description: string;
+}
+
+interface WhyUs {
+    subtitle_one: string;
+    description: string;
+    image: StrapiImage;
+    small_component: SmallComponent;
+}
+
+interface ExpertServicesData extends Block {
+    __component: "homepage.expert-services";
+    title: string;
+    decor_love: DecorItem;
+    cardDetails: CardDetail[];
+    bookAppointment: unknown;
+    why_us: WhyUs;
+}
+
+interface JoinNewsLetterData {
+    title: string;
+    subtitle: string;
+    disclaimer: string;
+}
+
+interface GlobalData {
+    decor_tree: StrapiImage;
+    decor_chair: StrapiImage;
+    decor_butterfly1: StrapiImage;
+    join_news_letter: JoinNewsLetterData;
+    header: {
+        logo: StrapiImage;
+    };
+}
+
+interface HomePageData {
+    blocks: Block[];
+}
+
 export default async function HomePage() {
-    const res = await getHomePageData();
+    const res: HomePageData = await getHomePageData();
+    const globalres: GlobalData = await getGlobalData();
 
-    const globalres = await getGlobalData();
+    const herosection = res.blocks.find((block: Block) => block.__component === "blocks.hero-section") as HeroSectionData | undefined;
+    const founderNote = res.blocks.find((block: Block) => block.__component === "homepage.founder-note") as FounderNoteData | undefined;
+    // Note: evaluationMethodologies was commented out since it's not used
+    // const evaluationMethodologies = res.blocks.find((block: Block) => block.__component === "homepage.evaluation-methodologies");
+    const expertServices = res.blocks.find((block: Block) => block.__component === "homepage.expert-services") as
+        | ExpertServicesData
+        | undefined;
+    const healthRequirement = res.blocks.find((block: Block) => block.__component === "homepage.health-requirement");
+    const vibeSection = res.blocks.find((block: Block) => block.__component === "homepage.vibe-section");
+    const commonQuote = res.blocks.find((block: Block) => block.__component === "homepage.common-quote");
+    const testimonials = res.blocks.find((block: Block) => block.__component === "homepage.testimonials");
+    const feedback = res.blocks.find((block: Block) => block.__component === "homepage.feedback");
 
-    const herosection = res.blocks.find((block: any) => block.__component === "blocks.hero-section");
-    const founderNote = res.blocks.find((block: any) => block.__component === "homepage.founder-note");
-    const evaluationMethodologies = res.blocks.find((block: any) => block.__component === "homepage.evaluation-methodologies");
-    const expertServices = res.blocks.find((block: any) => block.__component === "homepage.expert-services");
-    const healthRequirement = res.blocks.find((block: any) => block.__component === "homepage.health-requirement");
-    const vibeSection = res.blocks.find((block: any) => block.__component === "homepage.vibe-section");
-    const commonQuote = res.blocks.find((block: any) => block.__component === "homepage.common-quote");
-    const testimonials = res.blocks.find((block: any) => block.__component === "homepage.testimonials");
-    const feedback = res.blocks.find((block: any) => block.__component === "homepage.feedback");
+    // Add safety checks for required data
+    if (!herosection) {
+        throw new Error("Hero section data not found");
+    }
+    if (!founderNote) {
+        throw new Error("Founder note data not found");
+    }
+    if (!expertServices) {
+        throw new Error("Expert services data not found");
+    }
 
     const { bg_image } = herosection;
-
     const { decor_tree, decor_chair, decor_butterfly1, join_news_letter, header } = globalres;
 
     return (
@@ -108,7 +200,14 @@ export default async function HomePage() {
     );
 }
 
-export function HeroSection(props: any) {
+interface HeroSectionProps {
+    data: HeroSectionData;
+    header: {
+        logo: StrapiImage;
+    };
+}
+
+export function HeroSection(props: HeroSectionProps) {
     const { data, header } = props;
 
     const { subtitle_one, title, description, subtitle_two, image } = data;
@@ -142,8 +241,7 @@ export function HeroSection(props: any) {
                     >
                         <div className="bg-background grid h-fit scale-120 place-items-center rounded-full p-2">
                             <Play className="fill-foreground stroke-foreground" />
-                        </div>
-                        {" "}
+                        </div>{" "}
                         <span>Watch Now</span>
                     </Button>
                 </div>
@@ -152,8 +250,12 @@ export function HeroSection(props: any) {
     );
 }
 
-function FoundersNoteSection(data: any) {
-    const { title, video, decor_highlight, decor_highlight2, decor_new, subtitle } = data.data;
+interface FoundersNoteSectionProps {
+    data: FounderNoteData;
+}
+
+function FoundersNoteSection({ data }: FoundersNoteSectionProps) {
+    const { title, decor_highlight, decor_new } = data;
     return (
         <section className="section flex flex-col items-center justify-center gap-2 py-8 md:min-h-dvh">
             <h2 className="font-popins relative mb-4 text-3xl font-semibold italic md:text-5xl">
@@ -193,43 +295,12 @@ function FoundersNoteSection(data: any) {
     );
 }
 
-function ExpertServicesSection(data: any) {
-    const { title, decor_love, cardDetails, bookAppointment, why_us } = data.data;
+interface ExpertServicesSectionProps {
+    data: ExpertServicesData;
+}
 
-    // const cardDetails = [
-    //     {
-    //         imagePath: "/jpeg/Consultation.jpg",
-    //         title: "Consultations",
-    //         description: "Discuss your needs with a professional and learn about your care options.",
-    //     },
-    //     {
-    //         imagePath: "/jpeg/Individual therapy.jpg",
-    //         title: "Individual Counseling & Therapy",
-    //         description: "A safe and empowering space to navigate life’s journey with guidance.",
-    //     },
-    //     {
-    //         imagePath: "/jpeg/ADHD group coaching.jpg",
-    //         title: "Adhd Group Coaching Sessions",
-    //         description: "Develop resilience, organization, and management skills in a shared group setting.",
-    //     },
-    //     {
-    //         imagePath: "/jpeg/Asessment and diagnosis.jpg",
-    //         title: "Assessment & Diagnosis",
-    //         description:
-    //             "A thoughtful conversation to explore your experiences, uncover their origins, and understand their impact on your well-being.",
-    //     },
-    //     {
-    //         imagePath: "/jpeg/Psychiatric consultations.jpg",
-    //         title: "Psychiatric Consultations",
-    //         description:
-    //             "Expert psychiatric care for depression, anxiety, addiction, ADHD, neurodivergence, schizophrenia, mood disorders, and more.",
-    //     },
-    //     {
-    //         imagePath: "/images/decor-export-service-1.png",
-    //         title: "Book an Appointment",
-    //         isBookAppointment: true,
-    //     },
-    // ];
+function ExpertServicesSection({ data }: ExpertServicesSectionProps) {
+    const { title, decor_love, cardDetails, bookAppointment, why_us } = data;
 
     return (
         <section className="section flex flex-col items-center gap-12 pt-4 md:gap-16">
@@ -249,7 +320,7 @@ function ExpertServicesSection(data: any) {
             </div>
 
             <div className="grid grid-cols-1 justify-items-center gap-8 sm:grid-cols-2 md:grid-cols-3 md:gap-8">
-                {cardDetails.map((card: any) => (
+                {cardDetails.map((card: CardDetail) => (
                     <ExportServiceCard
                         key={card.id}
                         imagePath={card.imagePath?.url}
