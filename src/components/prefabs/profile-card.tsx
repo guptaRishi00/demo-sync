@@ -11,11 +11,14 @@ type Props = {
     designation: string;
     about: string;
     profileImage: { url: string } | string;
-
     facebook?: string;
     linkedin?: string;
     instagram?: string;
 };
+
+interface StrapiImageType {
+    url: string;
+}
 
 export default function ProfileCard({ name, designation, about, profileImage, facebook, linkedin, instagram }: Props) {
     const [showDetails, setShowDetails] = useState(false);

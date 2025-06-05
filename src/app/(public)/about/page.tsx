@@ -11,6 +11,64 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious
 import { getAboutData, getGlobalData } from "@/data/loader";
 import { CircleCheck } from "lucide-react";
 
+interface StrapiImageType {
+    url: string;
+}
+
+interface HeroSectionData {
+    __component: "blocks.hero-section";
+    title: string;
+    description: string;
+    image: StrapiImageType;
+    decor_image: {
+        image?: StrapiImageType;
+    };
+    small_component: {
+        title: string;
+        description: string;
+    };
+    bg_image?: StrapiImageType;
+}
+
+type ExpertProfile = {
+    name: string;
+    designation: string;
+    about: string;
+    profileImage: StrapiImageType | string;
+    facebook?: string;
+    linkedin?: string;
+    instagram?: string;
+    id: number;
+};
+
+interface MeetExpertsData {
+    __component: "aboutpage.meet-experts";
+    title: string;
+    subtitle: string;
+    decor_image: StrapiImageType;
+    profiles: ExpertProfile[];
+}
+
+interface VisionItem {
+    id: number;
+    list: string;
+}
+
+interface VisionSectionData {
+    __component: "aboutpage.why-choose";
+    title: string;
+    image: StrapiImageType;
+    list: VisionItem[];
+    mission: {
+        title: string;
+        description: string;
+    };
+    vision: {
+        title: string;
+        description: string;
+    };
+}
+
 export default async function AboutPage() {
     const globalres = await getGlobalData();
     const { decor_tree, decor_chair, join_news_letter, header } = globalres;
@@ -71,7 +129,7 @@ export default async function AboutPage() {
     );
 }
 
-function HeroSection(props: any) {
+function HeroSection(props: { header: any; data: HeroSectionData }) {
     const { header, data } = props;
 
     const { title, description, image, decor_image, small_component } = data;
@@ -117,138 +175,7 @@ function HeroSection(props: any) {
     );
 }
 
-function MeetOurExpertSection({ data }: any) {
-    // const profiles = [
-    //     {
-    //         name: "Dr.Vinod Kumar",
-    //         designation: "Psychiatrist & Founder - SyNC Positive Psychiatry Foundation",
-    //         about: "Embarking from the UK's renowned National Health Service to being the founder of SyNC Positive Psychiatry, Bangalore, Dr. Vinod Kumar brings over a decade of world-class psychiatric and psychotherapeutic expertise. With MRCPsych and specialized certifications in Liaison Psychiatry and Eating Disorders, his training spans diverse therapeutic modalities, shaping his comprehensive approach. Beyond the clinical, he sees how our stories, our very essence, are woven into the fabric of our well-being. Extending his holistic expertise, Dr. Kumar has established an innovative clinical service for Neurodivergence (ASD) and Adult ADHD, coupled with active research to improve mental health care. His mission? Personalized, dynamic mental health care that meets you where you are.",
-    //         // facebook: "https://www.facebook.com",
-    //         // linkedin: "https://www.linkedin.com",
-    //         // instagram: "https://www.instagram.com",
-    //         profileImage: "/jpeg/profiles/Dr Vinod.jpg",
-    //     },
-    //     {
-    //         name: "Dr. Balu Pitchiah",
-    //         designation: "Consultant Psychiatrist | Brain Health & Peak Performance",
-    //         about: "Dr. Balu Pitchiah is an internationally trained Consultant Psychiatrist with experience across the UK, UAE, and India. Known for his holistic, high-impact approach, he specializes in emotional wellness, neurodivergence, and high-performance mental health. With expertise in ADHD, ASD, anxiety, burnout, and behavioural patterns, he has supported over 25,000 individuals, particularly professionals and high achievers. He integrates Western psychiatry with insights from neuroeconomics, behavioural finance, and Eastern healing arts. A member of the Royal College of Psychiatrists and the American Psychiatric Association, Dr. Balu Pitchiah combines clinical care with functional wellness to promote sustainable brain and behavioural transformation.",
-    //         // facebook: "https://www.facebook.com",
-    //         // linkedin: "https://www.linkedin.com",
-    //         // instagram: "https://www.instagram.com",
-    //         profileImage: "/jpeg/profiles/Dr Balu.jpg",
-    //     },
-    //     {
-    //         name: "Dr. Poornima Chandrashekar",
-    //         designation: "Clinical Psychologist. Expert in Child, Adolescent & Family Mental Health",
-    //         about: "Dr. Poornima C, a Clinical Psychologist with over 14+ years of experience, specializes in child, adolescent, and family mental health. Holding an M.Phil. and Ph.D. from NIMHANS, she has contributed significantly to research in OCD, child psychiatry, and caregiver stress. Her client-centered approach, utilizing CBT and family interventions, is personalized to meet each individual's needs. A recognized expert, she presents research papers at conferences and publishes on parenting styles, and is trained in SPACE, a parent-based treatment for child anxiety and OCD. Outside of her professional life, she enjoys traveling, dining, and spending time with family and her dogs.",
-    //         // facebook: "https://www.facebook.com",
-    //         // linkedin: "https://www.linkedin.com",
-    //         // instagram: "https://www.instagram.com",
-    //         profileImage: "/jpeg/profiles/Dr Poornima.jpeg",
-    //     },
-    //     {
-    //         name: "Dr. Anupama Bajaj",
-    //         designation: "Psychologist",
-    //         about: "Anupama, with over 10+ years of experience, guides individuals, couples, and families through life's challenges, including ADHD, ASD, OCD, PTSD, anxiety, grief, sex, depression, phobias, insomnia, personality disorders, and relationship issues. Her journey, enriched by Art Therapy and a Ph.D. in Psychology, translates into a transformative, empathetic, and evidence-based approach, creating a safe space for clients. She empowers clients to break barriers and unlock self-growth, blending scientific knowledge with heartfelt support for a happier, healthier life.",
-    //         // facebook: "https://www.facebook.com",
-    //         // linkedin: "https://www.linkedin.com",
-    //         // instagram: "https://www.instagram.com",
-    //         profileImage: "/jpeg/profiles/Dr. Anupama Bajaj.jpeg",
-    //     },
-    //     {
-    //         name: "Kala Bhandari",
-    //         designation: "Counselling Psychologist",
-    //         about: "Ms. Kala Bhandari, a compassionate Counsellor & Therapist, specializes in Behavioral, Relationship, Marriage, and Family Counselling. Certified in CBT and Personal Counselling, she employs a holistic, client-centered, and trauma-informed approach, integrating narrative therapy, mindfulness, and behavioral techniques. With mentorship from Dr. Vinod Kumar and her extensive experience, she guides individuals, couples in their marriage and families through challenges like anxiety, depression, adolescent concerns, and career/goal setting, creating a safe space for healing and positive transformation.",
-    //         // facebook: "https://www.facebook.com",
-    //         // linkedin: "https://www.linkedin.com",
-    //         // instagram: "https://www.instagram.com",
-    //         profileImage: "/jpeg/profiles/Dr Kala.jpg",
-    //     },
-    //     {
-    //         name: "Mehak Gill",
-    //         designation: "Psychologist",
-    //         about: "Mehak Gill, M.Sc. Clinical Psychology (Christ University) offers a joyful, compassionate, and empowering therapeutic approach. She creates a safe, supportive space where clients feel heard and valued, using an eclectic, solution-focused method that integrates empathy, self-care, and mindfulness. Tailoring sessions to build resilience and reshape thought patterns, she guides individuals through challenges like grief, anxiety, and ADHD, fostering clarity, strength, and well-being. With Mehak, therapy isn’t just about healing—it’s about thriving.",
-    //         // facebook: "https://www.facebook.com",
-    //         // linkedin: "https://www.linkedin.com",
-    //         // instagram: "https://www.instagram.com",
-    //         profileImage: "/jpeg/profiles/Dr Mehek.jpg",
-    //     },
-    //     {
-    //         name: "Esha Jiani",
-    //         designation: "Psychologist",
-    //         about: "Esha, holding a Master’s in Clinical Psychology, specializes in supporting young adults with relationship issues, anxiety, and emotional regulation. Her approach helps the client understand their experiences and provides them the skills to articulate their stories, fostering deeper self-awareness, self-compassion, and growth. Fluent in English and Hindi, she is passionate about guiding clients to achieve a more balanced and fulfilling life. Beyond therapy, Esha is deeply passionate about books in philosophy, psychology, fiction, art, nature, spirituality, and sports, believing that creativity and connection fuel emotional well-being—both in herself and in those she helps.",
-    //         // facebook: "https://www.facebook.com",
-    //         // linkedin: "https://www.linkedin.com",
-    //         // instagram: "https://www.instagram.com",
-    //         profileImage: "/jpeg/profiles/Dr Esha.jpg",
-    //     },
-    //     {
-    //         name: "P Kalyan",
-    //         designation: "Psychologist",
-    //         about: "Kalyan, M.Sc. Clinical Psychology offers a client-centered, analytical approach to therapy, specializing in ADHD, anxiety, interpersonal conflicts, emotional regulation, and autism. With 2+ years of experience and 100+ clients, he provides a trauma-informed, queer-affirmative space where clients feel seen and heard. Drawing from his own experience with ADHD and the queer community, and leveraging expertise from NIMHANS and PESI USA, he ensures his practice is informed by the latest research. Fluent in English, Hindi, and Telugu, Kalyan integrates mindfulness into his work. He helps clients navigate the ups and downs of life while teaching them to harness their intuitive abilities.",
-    //         // facebook: "https://www.facebook.com",
-    //         // linkedin: "https://www.linkedin.com",
-    //         // instagram: "https://www.instagram.com",
-    //         profileImage: "/jpeg/profiles/Dr Kalyan.jpg",
-    //     },
-    //     {
-    //         name: "Vani Mitti",
-    //         designation: "Psychologist",
-    //         about: "Vani Mitti, with a Master’s in Psychology from Annamalai University and specialized training in child psychology and counselling, brings over a decade of experience in child development centers, neuropsychiatry hospitals, and schools. Her expertise includes IQ, ASD, and ADHD assessments, and evidence-based therapies like Behavioral Therapy, CBT, and Habit Reversal Therapy. She also offers Parent Counselling to improve family dynamics. Fluent in English, Kannada, and Hindi, Vani creates a safe, supportive environment, tailoring therapy to individual needs with empathy and a solution-focused approach. Outside of work, she enjoys reading and singing and is dedicated to empowering clients to reach their full potential.",
-    //         // facebook: "https://www.facebook.com",
-    //         // linkedin: "https://www.linkedin.com",
-    //         // instagram: "https://www.instagram.com",
-    //         profileImage: "/jpeg/profiles/Dr Vani.jpg",
-    //     },
-    //     {
-    //         name: "Raunak Jain",
-    //         designation: "Psychologist",
-    //         about: "Raunak Jain, with a postgraduate degree in Clinical Psychology and experience from NIMHANS, creates a safe, empathetic, and collaborative therapeutic space. Utilizing a biopsychosocial approach and emphasizing the mind-body connection, she provides personalized, holistic care. Her expertise spans ADHD coaching, anxiety, depression, and relationship issues, integrating design thinking, positive psychology, and postmodern therapies, including narrative therapy and mindfulness. Outside of therapy, she enjoys exploring coffee and herbal teas, reflecting her commitment to curiosity and growth.",
-    //         // facebook: "https://www.facebook.com",
-    //         // linkedin: "https://www.linkedin.com",
-    //         // instagram: "https://www.instagram.com",
-    //         profileImage: "/jpeg/profiles/Dr Raunak.jpg",
-    //     },
-    //     {
-    //         name: "Dr. Harsh P Jain",
-    //         designation: "Physician",
-    //         about: "Dr. Harsh P Jain, MBBS, a physician on a path to pursue postgraduate studies in Psychiatry in the UK, is driven by a profound curiosity about the human mind and believes in the mind-body-emotion-energy connection.  His warm, approachable demeanor, coupled with fluency in English, Hindi, Tamil, and Marwari, fosters strong client connections. Passionate about neurodivergence, Dr. Jain focuses on ADHD and related disorders, using his personal experience to connect with and empower clients. His goal is to guide individuals toward more fulfilling and balanced lives, helping them navigate their unique challenges. In his downtime, Dr. Jain enjoys swimming, badminton, and adventure sports, always seeking ways to embrace life with energy and enthusiasm.",
-    //         // facebook: "https://www.facebook.com",
-    //         // linkedin: "https://www.linkedin.com",
-    //         // instagram: "https://www.instagram.com",
-    //         profileImage: "/jpeg/profiles/Dr. Harsh.jpg",
-    //     },
-    //     {
-    //         name: "Anusha Kolloji",
-    //         designation: "Psychologist",
-    //         about: "Anusha practices a humanistic, growth-oriented approach in her work. Holding an MSc in Psychological Counseling from IIPR, Bengaluru, she is dedicated to creating a safe and supportive space where clients feel heard, understood, and empowered while catering in three languages: English, Hindi, and Telugu. She is experienced in the management of neurodivergence, anxiety, depression, and interpersonal and relationship issues. She has attended training and workshops from esteemed institutions like NIMHANS, Bengaluru, to stay updated with advancements in the mental health field. Beyond therapy, she enjoys painting, hiking, and volunteering, finding joy in creative expression and community work. When not working, she loves to spend time petting animals, exploring new food and places.",
-    //         // facebook: "https://www.facebook.com",
-    //         // linkedin: "https://www.linkedin.com",
-    //         // instagram: "https://www.instagram.com",
-    //         profileImage: "/jpeg/profiles/Dr Anusha.jpg",
-    //     },
-
-    //     {
-    //         name: "Darshana Kishore Gandhi",
-    //         designation: "Clinical Psychologist",
-    //         about: "Darshana Kishore Gandhi is an RCI-licensed Clinical Psychologist with an M.Phil in Clinical Psychology from DIMHANS, Dharwad. Her approach is integrative, client-centered, and insight-oriented, creating a safe space for healing and self-discovery. She works with emotional challenges, relationship issues, neurodivergence, addiction, and behavioral concerns, using evidence-based techniques while honoring each person’s unique journey. Beyond therapy, Darshana enjoys reading, writing, music, and dance, finding creativity essential to healing. Committed to lifelong learning, she continuously evolves as a practitioner, staying attuned to psychological advancements to offer thoughtful, effective care.",
-    //         // facebook: "https://www.facebook.com",
-    //         // linkedin: "https://www.linkedin.com",
-    //         // instagram: "https://www.instagram.com",
-    //         profileImage: "/jpeg/profiles/Dr Darshana.jpg",
-    //     },
-
-    //     {
-    //         name: "Richa Mehrotra",
-    //         designation: "Clinical Psychologist",
-    //         about: "Richa Mehrotra is an RCI-licensed Clinical Psychologist and Queer Affirmative Therapist with over four years of experience working with adolescents and adults. She specializes in depression, anxiety, obsessive-compulsive disorder (OCD), de-addiction, and interpersonal dynamics. She holds an M.Phil in Clinical Psychology from the Post Graduate Institute of Behaviour and Medical Sciences, Raipur. She has contributed to suicide prevention initiatives, including a project with the Mental Health Foundation, India, focused on Tihar Jail, Delhi. Richa adopts an eclectic therapeutic approach, tailoring interventions to meet the unique needs of clients and their families. She has a keen interest in cognitive, interpersonal, and diagnostic assessments. Fluent in English and Hindi, she is dedicated to providing a supportive and inclusive space for healing and growth.",
-    //         // facebook: "https://www.facebook.com",
-    //         // linkedin: "https://www.linkedin.com",
-    //         // instagram: "https://www.instagram.com",
-    //         profileImage: "/jpeg/profiles/Dr Richa.jpg",
-    //     },
-    // ];
-
+function MeetOurExpertSection({ data }: { data: MeetExpertsData }) {
     const { title, subtitle, decor_image, profiles } = data;
 
     return (
@@ -274,7 +201,7 @@ function MeetOurExpertSection({ data }: any) {
                     className="flex w-full flex-col gap-4"
                 >
                     <CarouselContent className="">
-                        {profiles.map((profile: any) => (
+                        {profiles.map((profile: ExpertProfile) => (
                             <CarouselItem key={profile.id} className="grow md:basis-1/2 lg:basis-1/3">
                                 <ProfileCard {...profile} />
                             </CarouselItem>
@@ -293,7 +220,7 @@ function MeetOurExpertSection({ data }: any) {
     );
 }
 
-function VisionSection({ data }: any) {
+function VisionSection({ data }: { data: VisionSectionData }) {
     const { title, image, list, mission, vision } = data;
 
     return (
@@ -308,7 +235,7 @@ function VisionSection({ data }: any) {
                     <h2 className="font-popins text-xl font-semibold md:text-3xl">{title}</h2>
 
                     <ul className="flex list-none flex-col items-start gap-3">
-                        {list.map((item: any) => (
+                        {list.map((item: VisionItem) => (
                             <li key={item.id} className="font-popins flex items-center gap-2 text-lg font-normal">
                                 <CircleCheck size={14} className="stroke-secondary-light" />
                                 {item.list}
