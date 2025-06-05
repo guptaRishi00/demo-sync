@@ -28,7 +28,7 @@ export default async function HomePage() {
 
     const herosection = res.blocks.find((block: any) => block.__component === "blocks.hero-section");
     const founderNote = res.blocks.find((block: any) => block.__component === "homepage.founder-note");
-    const evaluationMethodologies = res.blocks.find((block: any) => block.__component === "homepage.evaluation-methodologies");
+    // const evaluationMethodologies = res.blocks.find((block: any) => block.__component === "homepage.evaluation-methodologies");
     const expertServices = res.blocks.find((block: any) => block.__component === "homepage.expert-services");
     const healthRequirement = res.blocks.find((block: any) => block.__component === "homepage.health-requirement");
     const vibeSection = res.blocks.find((block: any) => block.__component === "homepage.vibe-section");
@@ -153,7 +153,7 @@ export function HeroSection(props: any) {
 }
 
 function FoundersNoteSection(data: any) {
-    const { title, video, decor_highlight, decor_highlight2, decor_new, subtitle } = data.data;
+    const { title, decor_highlight, decor_new } = data.data;
     return (
         <section className="section flex flex-col items-center justify-center gap-2 py-8 md:min-h-dvh">
             <h2 className="font-popins relative mb-4 text-3xl font-semibold italic md:text-5xl">
