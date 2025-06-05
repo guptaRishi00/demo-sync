@@ -37,7 +37,7 @@ export default async function EvaluationMethodologiesSection() {
         );
     }
 
-    const { title = "", description = "", video = "" } = evaluationMethodologies;
+    const { title = "", description = "" } = evaluationMethodologies;
 
     const titleWords = title.split(" ");
     const first = titleWords[0] || "";

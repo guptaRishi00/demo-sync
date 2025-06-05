@@ -2,7 +2,28 @@ import DecorImage from "@/components/prefabs/decor-image";
 import { Quote } from "lucide-react";
 import { StrapiImage } from "../custom/StrapiImage";
 
-export default function CommonQuoteSection(data: any) {
+interface QuoteProps {
+    data: {
+        description: string;
+        image: {
+            url: string;
+        };
+        decor_underline: {
+            image: {
+                url: string;
+            };
+        };
+        name: string;
+        designation: string;
+        decor_light: {
+            image: {
+                url: string;
+            };
+        };
+    };
+}
+
+export default function CommonQuoteSection(data: QuoteProps) {
     const { description, image, decor_underline, name, designation, decor_light } = data.data;
     return (
         <section className="section relative flex flex-col items-center gap-6 py-8 md:flex-row">
@@ -15,7 +36,7 @@ export default function CommonQuoteSection(data: any) {
                 <p className="font-popins relative text-lg font-medium">
                     {description}
                     <DecorImage
-                        src={decor_underline.image?.url}
+                        src={decor_underline.image?.url ?? ""}
                         alt="Decor Smile"
                         size={[240, 240]}
                         className="bottom-0 left-0 translate-y-2/3"

@@ -5,7 +5,7 @@ type Props = {
     className?: string;
     title?: string;
     description?: string;
-    imagePath?: { url?: any } | string;
+    imagePath?: { url?: string } | string;
 };
 
 export default function CommitmentCard({ className, title, description, imagePath }: Props) {
@@ -16,7 +16,7 @@ export default function CommitmentCard({ className, title, description, imagePat
                 <p className="mb-12 text-base font-normal">{description}</p>
             </div>
             <StrapiImage
-                src={typeof imagePath === "string" ? imagePath : imagePath?.url}
+                src={typeof imagePath === "string" ? imagePath : (imagePath?.url ?? "")}
                 alt={title ?? ""}
                 className="-z-10 h-full w-full object-cover"
             />

@@ -17,9 +17,9 @@ export interface BlogPost {
 }
 
 // Expected shape of Strapi API response
-interface StrapiMedia {
-    image: string;
-}
+// interface StrapiMedia {
+//     image: string;
+// }
 
 // interface StrapiPostAttributes {
 //     title: string;

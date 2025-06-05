@@ -6,6 +6,9 @@ interface Testimonial {
     rating: number;
     profile: { url: string };
     name: string;
+    id: number;
+    title: string;
+    description: string;
 }
 interface Props {
     data: {
@@ -37,7 +40,7 @@ export default function TestimonialsSection(data: Props) {
                         </div>
                     </div>
                     <CarouselContent className="py-8">
-                        {testimonials.map((testimonial: any) => (
+                        {testimonials.map((testimonial: Testimonial) => (
                             <CarouselItem key={testimonial.id} className="grow md:basis-1/3 lg:basis-1/4">
                                 <div className="shadow-primary/20 flex h-full flex-col gap-4 rounded-md bg-white px-4 py-12 shadow-lg">
                                     <div className="flex flex-wrap items-end justify-between gap-4">

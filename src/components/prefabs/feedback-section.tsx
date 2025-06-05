@@ -3,7 +3,61 @@ import DecorImage from "./decor-image";
 import { StrapiImage } from "../custom/StrapiImage";
 import React from "react";
 
-export default function FeedbackSection(data: any) {
+interface ContactSectionData {
+    title: string;
+    description: string;
+    bg_testimonial: {
+        url: string;
+    };
+    testimonial_mask: {
+        url: string;
+    };
+    qr_code: {
+        url: string;
+    };
+    cat: string;
+    location: string;
+    full_location: string;
+    phone_number: string;
+    number: string;
+    e_mail: string;
+    mail: string;
+}
+
+interface ContactSectionProps {
+    data: {
+        title: string;
+        description: string;
+        bg_testimonial: {
+            image: {
+                url: string;
+            };
+        };
+        testimonial_mask: {
+            image: {
+                url: string;
+            };
+        };
+        qr_code: {
+            image: {
+                url: string;
+            };
+        };
+        cat: {
+            image: {
+                url: string;
+            };
+        };
+        location: string;
+        full_location: string;
+        phone_number: string;
+        number: string;
+        e_mail: string;
+        mail: string;
+    };
+}
+
+export default function FeedbackSection(data: ContactSectionProps) {
     const {
         title,
         description,
