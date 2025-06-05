@@ -15,6 +15,11 @@ interface StrapiImageType {
     url: string;
 }
 
+interface ListItem {
+    title: string;
+    description: string;
+}
+
 interface HeroSectionData {
     __component: "blocks.hero-section";
     title: string;
@@ -302,7 +307,7 @@ function ConsultationSection({ data }: ConsultationSectionProps) {
                     <div className="flex flex-col">
                         <p className="font-popins inline text-justify text-lg font-medium md:leading-7">{list_title}</p>
                         <ul className="mt-4 space-y-4">
-                            {list.map((item: any, index: number) => (
+                            {list.map((item: ListItem, index: number) => (
                                 <React.Fragment key={index}>
                                     <li className="font-bold">
                                         {item.title}
@@ -395,7 +400,7 @@ function PsychiatricConsultationsSection({ data }: PsychiatricConsultationsSecti
                         <div className="flex flex-col">
                             <p className="font-popins inline text-justify text-lg font-medium md:leading-7">{list_title}</p>
                             <ul className="mt-4 space-y-4">
-                                {list?.map((item: any, index: number) => (
+                                {list?.map((item: ListItem, index: number) => (
                                     <React.Fragment key={index}>
                                         <li className="font-bold">
                                             {item.title}
@@ -515,7 +520,7 @@ function CounsellingAndPsychotherapy({ data }: CounsellingAndPsychotherapyProps)
                     <div className="flex flex-col">
                         <p className="font-popins inline text-justify text-lg font-medium md:leading-7">{list_title}</p>
                         <ul className="mt-4 space-y-4">
-                            {list?.map((item: any, index: number) => (
+                            {list?.map((item: ListItem, index: number) => (
                                 <React.Fragment key={index}>
                                     <li className="font-bold">
                                         {item.title}
