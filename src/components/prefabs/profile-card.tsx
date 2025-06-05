@@ -16,9 +16,9 @@ type Props = {
     instagram?: string;
 };
 
-interface StrapiImageType {
-    url: string;
-}
+// interface StrapiImageType {
+//     url: string;
+// }
 
 export default function ProfileCard({ name, designation, about, profileImage, facebook, linkedin, instagram }: Props) {
     const [showDetails, setShowDetails] = useState(false);

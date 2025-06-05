@@ -72,7 +72,7 @@ interface CommitmentSectionData {
     __component: "aboutpage.commitment-section";
     title: string;
     description: string;
-    points: {
+    commitment: {
         id: number;
         text: string;
     }[];

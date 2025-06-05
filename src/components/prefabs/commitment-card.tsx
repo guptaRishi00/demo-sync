@@ -3,9 +3,9 @@ import { StrapiImage } from "../custom/StrapiImage";
 
 type Props = {
     className?: string;
-    title: string;
-    description: string;
-    imagePath: { url?: any } | string;
+    title?: string;
+    description?: string;
+    imagePath?: { url?: any } | string;
 };
 
 export default function CommitmentCard({ className, title, description, imagePath }: Props) {
@@ -17,7 +17,7 @@ export default function CommitmentCard({ className, title, description, imagePat
             </div>
             <StrapiImage
                 src={typeof imagePath === "string" ? imagePath : imagePath?.url}
-                alt={title}
+                alt={title ?? ""}
                 className="-z-10 h-full w-full object-cover"
             />
         </div>

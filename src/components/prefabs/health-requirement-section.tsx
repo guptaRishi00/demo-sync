@@ -2,8 +2,30 @@ import DecorImage from "@/components/prefabs/decor-image";
 import SimpleCard from "@/components/prefabs/simple-card";
 import Image from "next/image";
 
-export default function HealthRequirementSection(data: any) {
-    const { title, description, decor_smile, simple_card } = data.data;
+interface StrapiImage {
+    url: string;
+}
+
+interface Card {
+    id: number;
+    title: string;
+    description?: string;
+    image: StrapiImage;
+}
+
+interface Props {
+    data: {
+        title: string;
+        description: string;
+        decor_smile: {
+            image: StrapiImage;
+        };
+        simple_card: Card[];
+    };
+}
+
+export default function HealthRequirementSection({ data }: Props) {
+    const { title, description, decor_smile, simple_card } = data;
 
     const classArray = [
         "from-secondary-light bg-linear-to-br to-[#69482D]",
@@ -13,13 +35,16 @@ export default function HealthRequirementSection(data: any) {
     ];
 
     const scaleRatio = ["", "relative w-fit translate-x-[170%] -translate-y-1/9 scale-190", "", ""];
+
+    const titleWords = title.split(" ");
+
     return (
         <section className="section flex flex-col items-center justify-center gap-16 md:min-h-screen">
             <div className="flex w-full flex-col-reverse items-start justify-between gap-4 md:flex-row">
                 <div className="flex w-full flex-col gap-4 md:max-w-1/2">
                     <h2 className="font-popins relative mt-6 text-3xl font-medium md:mt-0 md:text-5xl md:leading-16">
-                        {title.split(" ")[0] + " " + title.split(" ")[1] + " "} <br />{" "}
-                        {title.split(" ")[2] + " " + title.split(" ")[3] + " " + title.split(" ")[4]}
+                        {titleWords.slice(0, 2).join(" ")} <br />
+                        {titleWords.slice(2, 5).join(" ")}
                         <DecorImage
                             src={decor_smile.image?.url}
                             alt="Decor Smile"
@@ -36,14 +61,14 @@ export default function HealthRequirementSection(data: any) {
             </div>
 
             <div className="grid w-full grid-cols-1 gap-8 text-white sm:grid-cols-2 lg:grid-cols-4">
-                {simple_card.map((card: any, i: number) => (
+                {simple_card.map((card, i) => (
                     <SimpleCard
-                        title={card.title}
-                        description={card.description}
-                        imagePath={card.decor_image?.image?.url}
-                        className={classArray[i]}
-                        scaleRatio="relative w-fit translate-x-[170%] -translate-y-1/9 scale-190"
                         key={card.id}
+                        title={card.title}
+                        description={card.description || ""}
+                        imagePath={card.image?.url}
+                        className={classArray[i]}
+                        scaleRatio={scaleRatio[i]}
                     />
                 ))}
             </div>

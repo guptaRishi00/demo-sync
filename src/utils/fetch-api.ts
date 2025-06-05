@@ -1,4 +1,9 @@
-export async function fetchAPI(url: any) {
+type StrapiResponse<T> = {
+    data: T;
+    meta?: any;
+};
+
+export async function fetchAPI<T = any>(url: string): Promise<T | { status: number; statusText: string }> {
     try {
         const response = await fetch(url, {
             method: "GET",
@@ -9,14 +14,18 @@ export async function fetchAPI(url: any) {
         });
 
         const contentType = response.headers.get("content-type");
-        if (contentType && contentType.includes("application/json") && response.ok) {
-            const data = await response.json();
+
+        if (contentType?.includes("application/json") && response.ok) {
+            const data: StrapiResponse<T> = await response.json();
             return data.data;
         } else {
-            return { status: response.status, statusText: response.statusText };
+            return {
+                status: response.status,
+                statusText: response.statusText,
+            };
         }
     } catch (error) {
-        console.error("Error GET data:", error);
+        console.error("Error fetching data:", error);
         throw error;
     }
 }

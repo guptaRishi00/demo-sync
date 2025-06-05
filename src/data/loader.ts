@@ -1,7 +1,7 @@
 import qs from "qs";
 import { fetchAPI } from "@/utils/fetch-api";
 import { getStrapiURL } from "@/utils/get-strapi-url";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 import { BlogPost } from "@/actions/blog.action";
 import axios from "axios";
 

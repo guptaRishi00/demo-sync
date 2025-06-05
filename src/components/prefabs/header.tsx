@@ -7,7 +7,11 @@ import { useCallback } from "react";
 import { Separator } from "../ui/separator";
 import { StrapiImage } from "../custom/StrapiImage";
 
-export default function Header(props: any) {
+interface Props {
+    logo: string;
+}
+
+export default function Header(props: Props) {
     const router = useRouter();
 
     const onLogoClick = useCallback(() => {

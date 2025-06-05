@@ -18,14 +18,28 @@ export interface BlogPost {
 
 // Expected shape of Strapi API response
 interface StrapiMedia {
-    data: {
-        attributes: {
-            url: string;
-        };
-    } | null;
+    image: string;
 }
 
-interface StrapiPostAttributes {
+// interface StrapiPostAttributes {
+//     title: string;
+//     content: string;
+//     author: string;
+//     reviewedBy: string;
+//     slug: string;
+//     type: string;
+//     date: string;
+//     image?: StrapiMedia;
+//     authorImage?: StrapiMedia;
+// }
+
+interface StrapiImage {
+    url: string;
+}
+
+interface StrapiPost {
+    image?: StrapiImage;
+    authorImage?: StrapiImage;
     title: string;
     content: string;
     author: string;
@@ -33,13 +47,6 @@ interface StrapiPostAttributes {
     slug: string;
     type: string;
     date: string;
-    image?: StrapiMedia;
-    authorImage?: StrapiMedia;
-}
-
-interface StrapiPost {
-    id: number;
-    attributes: StrapiPostAttributes;
 }
 
 interface StrapiResponse {
@@ -61,16 +68,16 @@ export const getAllPosts = async (): Promise<BlogPost[]> => {
     const { data } = await getStrapiData();
 
     return data.map(
-        ({ attributes }): BlogPost => ({
-            title: attributes.title,
-            content: attributes.content,
-            author: attributes.author,
-            reviewedBy: attributes.reviewedBy,
-            slug: attributes.slug,
-            type: attributes.type,
-            date: dayjs(attributes.date),
-            image: attributes.image?.data?.attributes.url || "",
-            authorImage: attributes.authorImage?.data?.attributes.url || "",
+        (post): BlogPost => ({
+            title: post.title,
+            content: post.content,
+            author: post.author,
+            reviewedBy: post.reviewedBy,
+            slug: post.slug,
+            type: post.type,
+            date: dayjs(post.date),
+            image: post.image?.url || "",
+            authorImage: post.authorImage?.url || "",
         }),
     );
 };
